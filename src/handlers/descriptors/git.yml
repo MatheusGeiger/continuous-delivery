@@ -1,0 +1,7 @@
+gitWebhook:
+  handler: src/handlers/git/gitWebhook.handler
+  timeout: 900
+  events:
+    - http:
+        path: git-webhook
+        method: post

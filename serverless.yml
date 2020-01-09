@@ -1,0 +1,34 @@
+service: cubo-continuous-delivery
+
+plugins:
+  - serverless-webpack
+  - serverless-layers
+  - serverless-domain-manager
+
+provider:
+  name: aws
+  versionFunctions: false
+  runtime: nodejs10.x
+  region: us-east-1
+  stage: dev
+  role:
+    Fn::ImportValue: functionRoleArn-${self:custom.stage} 
+  deploymentBucket:
+    name: ${self:service}-${file(./src/env.yml):${self:custom.stage}.AWS_ACCOUNT}-${self:custom.stage}-${self:provider.region}-deploys
+  environment: ${file(./src/env.yml):${self:custom.stage}}
+
+custom:
+  stage: ${env:SLS_STAGE, opt:stage, self:provider.stage}
+  customDomain:
+    domainName: ${file(./src/env.yml):${self:custom.stage}.DOMAIN_NAME}
+    basePath: 'continuous-delivery'
+    stage: ${self:custom.stage}
+    createRoute53Record: true
+  serverless-layers:
+    customInstallationCommand: 'echo "//registry.npmjs.org/:_authToken=${env:NPM_TOKEN}" > .npmrc && npm install --production'
+
+package:
+  exclude:
+    - tests/**
+
+functions: ${file(./src/serverless-dynamic.js):functions}

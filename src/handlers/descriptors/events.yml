@@ -1,0 +1,5 @@
+slackNotification:
+  handler: src/handlers/events/slackNotification.handler
+  timeout: 900
+  events:
+    - sns: ${self:service}-slack-pipeline-notification-${self:custom.stage}

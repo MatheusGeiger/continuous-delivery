@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - npm i
+
+  pre_build:
+   commands:
+     - npm run tslint
+
+  build:
+    commands:
+      - npm run test
+
+cache:
+  paths:
+    - 'node_modules/**/*'

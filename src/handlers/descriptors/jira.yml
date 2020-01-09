@@ -1,0 +1,7 @@
+jiraLanesChanges:
+  handler: src/handlers/jira/jiraLanesChanges.handler
+  timeout: 900
+  events:
+    - http:
+        path: jira-webhook
+        method: post

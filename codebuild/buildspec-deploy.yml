@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - npm i -g serverless
+      - npm i
+
+  pre_build:
+   commands:
+     - npm run tslint
+     - npm run test
+
+  build:
+    commands:
+      - npm run deploy:${DEPLOY_ENV}
+
+cache:
+  paths:
+    - 'node_modules/**/*'
